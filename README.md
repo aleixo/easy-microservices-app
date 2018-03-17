@@ -9,6 +9,18 @@ This package us still under massive development. **If you think you should, plea
 ### To install
 npm i easy-microservices-app
 
+
+### Settings.json
+
+This file will tell package where to get what he needs. The following table explains the entries on the example settings.json file
+
+| entry | meaning  |
+|--|--|
+| microservices | contains two key-value pairs saying where will all the microservices be located and what is the main file that loads the service after found |
+| middlewares | The package wants middlewares to process values like output errors. Here, you have to put where is the middleware and say if is one response middleware or request. You have to specify what is the parser function name for the middleware. The app will looke there  |
+| models | It is a work in progress but for now but the goal is to be able to inject models. in the example, i am injecting onde model for error response and sucess respose. You can say what is the method that parses responses but is not implemented. In fact, this hole thing is king of green. Too much |
+| postgresql | The Db connection. For now i **only support postgresql**|
+
 ### To use
 It´s simple enough to use. You have to create your service starting with one file named "Router.js" inside of the service folder. You have to put all the services inside the same folder.
 
