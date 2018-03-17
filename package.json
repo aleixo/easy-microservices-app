@@ -5,9 +5,6 @@
   "repository": "aleixo/easy-microservices-app",
   "version": "0.0.5",
   "private": false,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
