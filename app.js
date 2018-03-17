@@ -6,25 +6,27 @@ class App {
         const cookieParser = require("cookie-parser");
         const bodyParser = require("body-parser");
         const app = express();   
+        
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(logger('dev'));
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public')));
+
         settings = require(settings);
-        const MicroservicesLoader = require('./MicroservicesLoader');
-        const microservicesLoader = new MicroservicesLoader(settings);
-        const services = microservicesLoader.loadModulesFacade();
-        const responseMiddleware = microservicesLoader.loadModulesFacade(true);          
+
+        const ApiLoader = require('./ApiLoader');
+        const apiLoader = new ApiLoader(settings);
+        const services = apiLoader.loadModulesFacade();                 
         
-        const ServiceError = require(settings.models.serviceResponse.error.path);
+        const ServiceError = require(__dirname+settings.models.serviceResponse.error.path);
         const serviceErrorParserMethodName = settings.models.serviceResponse.error.parserMethodName;
         const serviceErrorSettings = {
             ServiceError,
             serviceErrorParserMethodName            
         }
 
-        const middlewares = microservicesLoader.loadMiddlewares();                
+        const middlewares = apiLoader.loadMiddlewares();                
 
         middlewares.request && middlewares.request.forEach( (Middleware) => {            
             const MiddlewareClass = require(Middleware.folder) 
@@ -32,13 +34,13 @@ class App {
             app.use(middleware[Middleware.handlerMethodName]);
         });
 
-        services.length && services.forEach( (Service) => {            
+        services && services.length && services.forEach( (Service) => {            
             const router = new Service();   
             app.use(router.entry, router.configuredRouter)
         });
              
         middlewares.response && middlewares.response.forEach( (Middleware) => {                     
-            const MiddlewareClass = require(Middleware.folder) 
+            const MiddlewareClass = require(__dirname+Middleware.folder) 
             const middleware = new MiddlewareClass(serviceErrorSettings);                        
             app.use(middleware[Middleware.handlerMethodName]);
         });                            

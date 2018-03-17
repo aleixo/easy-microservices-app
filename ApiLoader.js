@@ -3,13 +3,13 @@
  * By microservice it means the service it serlf of the middlewares
  * 
 */
-class MicroservicesLoader {
+module.exports = class ApiLoader {
 
     /**
      * Creates on new instance ot the loader
      * @memberof MicroservicesLoader
      */
-    constructor(settings) {
+    constructor(settings) {        
         this.configureGlobals(settings);   
         this.fs = require('fs');   
         this.settings = settings;    
@@ -24,10 +24,10 @@ class MicroservicesLoader {
      */    
     loadModulesFacade() {          
         const inPath = this.settings.microservices.baseFolder;
-        const targetFile = this.settings.microservices.baseFolder;
+        const targetFile = this.settings.microservices.startFileName;
 
         try {
-            const dirs = this.getPathDirs(inPath)
+            const dirs = this.getPathDirs(process.env.PWD+inPath)
             if (dirs.length === 0) {
                 return this.searchForFile(inPath, targetFile);
             }
@@ -38,10 +38,17 @@ class MicroservicesLoader {
                 return route !== undefined
             });     
         } catch (e) {
-            return new Error('Error loading modules ',e);
+            console.log('ERROR LOADING SERVICES ',e.message)            
+            return e;
         }                                       
     }
 
+    /**
+     * Loads all the specified middlewares on settings file
+     * 
+     * @returns One object with middlewares
+     * @memberof MicroservicesLoader     
+     */
     loadMiddlewares() {
 
         const middlwares = this.settings.middlewares;
@@ -59,6 +66,14 @@ class MicroservicesLoader {
         }
     }
 
+    /**
+     * Request available middlewares fo response of request
+     * 
+     * @param {array} middlwares The middlewares paths
+     * @param {bool} isResponse Specifies if should request middleware for response or request
+     * @returns {object} One object with the middlewares for the specified type
+     * @memberof MicroservicesLoader
+     */
     requestMiddlewares(middlwares, isResponse) {                                                                   
         return middlwares.filter((middlewareFilter) => {
             return middlewareFilter.isResponseMiddleware == isResponse
@@ -90,14 +105,17 @@ class MicroservicesLoader {
      * @memberof MicroservicesLoader
      */
     searchForFile(inPath, targetFile) {
-        const files = this.fs.readdirSync(inPath);       
+        console.log('WILL SEARCH FOR FILES IN ',inPath);
+        const files = this.fs.readdirSync(process.env.PWD+inPath);       
             
+        console.log('GOT FILES ',files);
         const allowedFiles = files.filter((file) => {                
             return this.isFileDesiredForService(file, targetFile)
         })
         
-        if (allowedFiles.length > 0) {                            
-            const filePath = `${inPath}/${allowedFiles[0]}`                                                      
+        if (allowedFiles.length > 0) {                                        
+            const filePath = `${process.env.PWD}${inPath}/${allowedFiles[0]}`                                                      
+            console.log('ADDING FILE ', filePath)            
             return require(filePath);
         }
     }
@@ -111,9 +129,12 @@ class MicroservicesLoader {
      * @memberof MicroservicesLoader
      */
     isFileDesiredForService(file, targetFile) {
+        console.log(`CHECKING IF FILE ${file} IS ALLOWED FOR TARGET FILE ${targetFile}`)
         if (file.toLowerCase().split('.')[0] === targetFile.toLowerCase().split('.')[0]) {
+            console.log('FILE ALLOWED');
             return true;
         }
+        console.log('FILE NOT ALLOWED');
         return false;
     }
 
@@ -129,7 +150,4 @@ class MicroservicesLoader {
         global.Promise = require("bluebird");
         global.pgPool = new DbConnection(dbConfigs).pool;        
     }
-
 }
-
-module.exports = MicroservicesLoader;

@@ -1,11 +1,11 @@
 {
     "microservices": {
-        "baseFolder":"./resources/",
+        "baseFolder":"/routers/",
         "startFileName":"router"
     },
     "middlewares": [
         {
-            "folder":"./middlewares/ResponseMiddleware",            
+            "folder":"/middlewares/ResponseMiddleware",            
             "isResponseMiddleware": true,
             "handlerMethodName": "responseParser"
         }
@@ -13,23 +13,24 @@
     "models": {
       "serviceResponse": {          
             "error":{
-              "path":"./service/models/ServiceError",
+              "path":"/service/models/ServiceError",
               "parserMethodName":""
             },
             "success": {
-                "path":"./service/models/ServiceSuccess",
+                "path":"/service/models/ServiceSuccess",
                 "parserMethodName":""
             }
       }  
     },
-    "postgresql": {        
-        "user": "MY USER",
-        "password": "PASSWORD",
-        "database": "DB NAME",
-        "host": "HOST",
-        "port": 5432,                       
+    "postgresql": {   
+        "host": "ec2-23-21-76-49.compute-1.amazonaws.com",
+        "user": "dkimfmwhepqvaz",
+        "database": "dae1n1b45jp7lg",
+        "password": "",
+        "port": 5432,
+        "ssl": true,
         "max": 20,
         "idleTimeoutMillis": 30000,
-        "connectionTimeoutMillis": 20000
+        "connectionTimeoutMillis": 20000        
     }   
 }  

@@ -3,7 +3,7 @@
   "author": "Diogo Aleixo <aleixo.da@gmail.com>",
   "license": "MIT",
   "repository": "aleixo/easy-microservices-app",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "private": false,
   "dependencies": {
     "body-parser": "~1.18.2",
