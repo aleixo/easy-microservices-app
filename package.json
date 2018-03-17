@@ -2,12 +2,12 @@
   "name": "easy-microservices-app",
   "author": "Diogo Aleixo <aleixo.da@gmail.com>",
   "license": "MIT",
-  "repository":"aleixo/easy-microservices-app",
+  "repository": "aleixo/easy-microservices-app",
   "version": "0.0.5",
   "private": false,
   "scripts": {
     "start": "node ./bin/www"
-  },  
+  },
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
@@ -15,11 +15,9 @@
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
-  },
-  "devDependencies": {
+    "serve-favicon": "~2.4.5",
     "bluebird": "^3.5.1",
-    "fs": "0.0.1-security",    
-    "pg": "^7.4.1"    
+    "fs": "0.0.1-security",
+    "pg": "^7.4.1"
   }
 }
