@@ -9,10 +9,10 @@ class ResponseMiddleware {
      * Creates an instance of ResponseMiddleware.
      * @memberof ResponseMiddleware
      */
-    constructor() {
-        this.ServiceError = require('../service').models.serviceError;
+    constructor(settings) {
+        this.settings = settings;                      
     }
-    
+
     /**
      * Handles the response and properly formats
      * the error to be sent in the response
@@ -20,18 +20,18 @@ class ResponseMiddleware {
      * @returns {Function} One function wth the middleware implementation
      * @memberof ResponseMiddleware
      */
-    responseParser (context) {
-        return function (err, req, res, next) {            
-            if (err instanceof context.ServiceError) {
-                return res.status(err.code).send('CUSTOM ERROR ' + JSON.stringify(err.parsedError));
+    responseParser(context) {
+        return function (err, req, res, next) {
+            if (err instanceof context.settings.ServiceError) {
+                return res.status(err.code).send('CUSTOM ERROR ' + JSON.stringify(err[this.settings.serviceErrorParserMethodName]));
             }
 
             if (err) {
-              return res.status(500).send('ERROR ' + JSON.stringify(err));
+                return res.status(500).send('ERROR ' + JSON.stringify(err));
             }
-            return res.status(404).send();
+            next();
         };
-    }    
+    }
 }
 
 module.exports = ResponseMiddleware;

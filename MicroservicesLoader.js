@@ -9,21 +9,23 @@ class MicroservicesLoader {
      * Creates on new instance ot the loader
      * @memberof MicroservicesLoader
      */
-    constructor(dbSettingsLocation) {
-        this.configureGlobals(dbSettingsLocation);   
-        this.fs = require('fs');                                                
+    constructor(settings) {
+        this.configureGlobals(settings);   
+        this.fs = require('fs');   
+        this.settings = settings;    
     }
 
     /**
      * Allows the instance to search for a given module or modules, depending on the 
      * location
-     * 
-     * @param {string} inPath The path to start the module search
-     * @param {string} targetFile The file to be found on the path
+     *      
      * @returns {array} Represents the found module/modules
      * @memberof MicroservicesLoader
-     */
-    loadModules(inPath, targetFile) {  
+     */    
+    loadModulesFacade() {          
+        const inPath = this.settings.microservices.baseFolder;
+        const targetFile = this.settings.microservices.baseFolder;
+
         try {
             const dirs = this.getPathDirs(inPath)
             if (dirs.length === 0) {
@@ -36,8 +38,33 @@ class MicroservicesLoader {
                 return route !== undefined
             });     
         } catch (e) {
-            return [];
+            return new Error('Error loading modules ',e);
         }                                       
+    }
+
+    loadMiddlewares() {
+
+        const middlwares = this.settings.middlewares;
+
+        if (!middlwares.length) {
+            return new Error('No middlewares');
+        }
+
+        const request = this.requestMiddlewares(middlwares, false);
+        const response = this.requestMiddlewares(middlwares, true);
+
+        return {
+            request,
+            response
+        }
+    }
+
+    requestMiddlewares(middlwares, isResponse) {                                                                   
+        return middlwares.filter((middlewareFilter) => {
+            return middlewareFilter.isResponseMiddleware == isResponse
+        }).map((middleware) => {
+            return middleware;        
+        })
     }
 
     /**
@@ -95,9 +122,9 @@ class MicroservicesLoader {
      *
      * @memberof MicroservicesLoader
      */
-    configureGlobals(dbSettingsLocation) {
+    configureGlobals(settings) {
         const DbConnection = require("./service/").modules.dbConnection;
-        const dbConfigs = require(dbSettingsLocation).postgresql;        
+        const dbConfigs = settings.postgresql;        
 
         global.Promise = require("bluebird");
         global.pgPool = new DbConnection(dbConfigs).pool;        

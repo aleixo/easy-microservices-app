@@ -1,8 +1,8 @@
 const App = require('./app');
 
-const startApp = (port, dbSettingsLocation) => {
+const startApp = (port=3000, settings='./settings.json') => {
     const app = new App();
-    app.loadApp(port, dbSettingsLocation);
+    app.loadApp(port, settings);
 }
 
 const RouterWorker = require('./service/modules/RouterWorker');
@@ -16,4 +16,4 @@ module.exports = {
     }
 };
 
-startApp(3333, './config/settings.json');
+startApp();

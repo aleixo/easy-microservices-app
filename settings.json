@@ -1,0 +1,35 @@
+{
+    "microservices": {
+        "baseFolder":"./resources/",
+        "startFileName":"router"
+    },
+    "middlewares": [
+        {
+            "folder":"./middlewares/ResponseMiddleware",            
+            "isResponseMiddleware": true,
+            "handlerMethodName": "responseParser"
+        }
+    ],   
+    "models": {
+      "serviceResponse": {          
+            "error":{
+              "path":"./service/models/ServiceError",
+              "parserMethodName":""
+            },
+            "success": {
+                "path":"./service/models/ServiceSuccess",
+                "parserMethodName":""
+            }
+      }  
+    },
+    "postgresql": {        
+        "user": "MY USER",
+        "password": "PASSWORD",
+        "database": "DB NAME",
+        "host": "HOST",
+        "port": 5432,                       
+        "max": 20,
+        "idleTimeoutMillis": 30000,
+        "connectionTimeoutMillis": 20000
+    }   
+}  
