@@ -1,5 +1,7 @@
 # Microservices
 
+npm i easy-microservices-app
+
 ### This is one package that allows to easily deploy one API based on microservices.
 
 #### Just follow those steps
