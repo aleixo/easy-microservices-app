@@ -8,7 +8,7 @@ const startApp = (port, dbSettingsLocation) => {
 const RouterWorker = require('./service/modules/RouterWorker');
 const DbWorker = require('./service/modules/DbWorker');
 
-exports = {
+module.exports = {
     startApp,
     workers: {
         RouterWorker,

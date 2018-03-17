@@ -21,8 +21,11 @@ class App {
             app.use(router.entry, router.configuredRouter)
         });
         
-        const middleware = new responseMiddleware();
-        app.use(middleware.responseParser);
+        if (responseMiddleware){
+            const middleware = new responseMiddleware();
+            app.use(middleware.responseParser);
+        }
+    
         app.use(logger('dev'));
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public')));
