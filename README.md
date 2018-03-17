@@ -2,6 +2,10 @@
 
 This is one package that allows to easily deploy one API based on microservices. Born after i mane one API and allows the DEV to easily skip boilerplate code and quickly deploy one API
 
+## NOTE
+
+This package us still under massive development. **If you think you should, please, open one issue**
+
 ### To install
 npm i easy-microservices-app
 
